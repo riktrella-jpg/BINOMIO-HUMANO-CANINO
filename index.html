@@ -8,26 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Colores principales */
+  /* Paleta */
   --blue:#1172B8; --teal:#2AB3A6; --orange:#FF8A34; --cream:#FFEEDB; --mist:#F6FAFD;
-  /* Colores de texto y fondo */
-  --text:#182026; /* Texto oscuro para fondos claros */
-  --muted:#5E6A75; /* Texto tenue para fondos claros */
-  --ink:#0D2433; /* Fondo oscuro principal (¡Nuevo!) */
-  --green:#2FBF71; --white:#fff;
-  /* Colores de contraste para fondo oscuro */
-  --text-on-dark: var(--mist); 
-  --muted-on-dark: #AAB9C8;
+  --text:#182026; --muted:#5E6A75; --ink:#0B1A27; --green:#2FBF71; --white:#fff;
+  --text-on-dark:#EAF6FF; --muted-on-dark:#AAB9C8;
+  /* Motion tokens */
+  --e1:cubic-bezier(.22,.61,.36,1); --e2:cubic-bezier(.16,1,.3,1);
+  --dur-s:220ms; --dur-m:600ms; --dur-l:1200ms;
 }
 *{box-sizing:border-box}
-
-/* CAMBIO 1 y 2: Fondo Oscuro para la página, Texto Claro */
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;
-  color:var(--text-on-dark); /* Color de fuente claro */
-  background:var(--ink); /* Fondo principal oscuro */
-  line-height:1.55
+  margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;
+  color:var(--text-on-dark); background:var(--ink); line-height:1.55;
 }
 .container{max-width:1100px;margin:0 auto;padding:clamp(16px,2vw,24px)}
 h1,h2,h3{line-height:1.2;margin:0 0 .5rem}
@@ -35,133 +28,179 @@ h1{font-size:clamp(28px,4vw,44px);font-weight:800}
 h2{font-size:clamp(22px,3vw,32px);font-weight:800}
 h3{font-size:clamp(18px,2vw,22px);font-weight:700}
 p{margin:.25rem 0 1rem}
-small,.small{font-size:.9rem;color:var(--muted-on-dark)} /* Texto small en oscuro */
+small,.small{font-size:.9rem;color:var(--muted-on-dark)}
+a.skip{position:absolute;left:-9999px}
+a.skip:focus{left:8px;top:8px;background:var(--white);color:var(--ink);padding:8px;border-radius:8px;z-index:999}
+
+img{max-width:100%;height:auto;border-radius:14px}
 
 /* Botones */
 .btn{display:inline-flex;gap:.5rem;align-items:center;justify-content:center;
   padding:.9rem 1.2rem;border-radius:14px;font-weight:700;text-decoration:none;border:2px solid transparent;
-  transition:filter .15s ease, transform .08s ease, box-shadow .15s ease; min-height:48px}
-.btn:hover{filter:brightness(1.02)}
+  transition:transform var(--dur-s) var(--e2), box-shadow var(--dur-s) var(--e1), filter var(--dur-s) var(--e1)}
+.btn:hover{filter:brightness(1.03)}
 .btn:active{transform:translateY(1px)}
-.btn:focus-visible{outline:3px solid var(--teal); outline-offset:2px} /* Resalte en teal */
+.btn:focus-visible{outline:3px solid var(--teal); outline-offset:2px}
 .btn-primary{background:var(--orange);color:var(--ink);box-shadow:0 8px 20px rgba(255,138,52,.25)}
 .btn-secondary{background:var(--blue);color:var(--white)}
-.btn-ghost{background:transparent;border-color:var(--teal);color:var(--teal)} /* Botón ghost en teal para contraste */
+.btn-ghost{background:transparent;border-color:var(--teal);color:var(--teal)}
 
-/* Hero con gradiente y patrón de huellas */
+/* HERO */
 .hero{
-  position:relative; color:var(--ink);
-  /* Mantenemos el gradiente claro del hero, pero aseguramos que el texto principal sea oscuro */
+  position:relative; color:var(--ink); overflow:hidden;
   background: radial-gradient(1200px 400px at 10% -10%, #D7F7F4 0%, rgba(215,247,244,0) 60%),
-            linear-gradient(135deg, #E7F3FC 0%, #FDFEFF 100%);
-  overflow:hidden;
+              linear-gradient(135deg,#E7F3FC 0%,#FDFEFF 100%);
+  isolation:isolate;
 }
-.paws{
-  position:absolute; inset:0; opacity:.08; pointer-events:none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 100 100"><g fill="%231172B8"><circle cx="20" cy="20" r="8"/><circle cx="50" cy="15" r="6"/><circle cx="70" cy="30" r="7"/><circle cx="35" cy="40" r="9"/><path d="M55 60c12 0 19 8 19 14s-7 9-19 9-19-3-19-9 7-14 19-14z"/></g></svg>');
-  background-size:140px 140px;
+@media (prefers-reduced-motion:no-preference){
+  .hero{background-size:200% 200%; animation:gradMove 18s ease-in-out infinite alternate}
+  @keyframes gradMove{0%{background-position:0% 0%,0% 0%}100%{background-position:100% 100%,100% 0%}}
+}
+.paws{position:absolute; inset:-20% -10% 0 -10%; opacity:.1; pointer-events:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 100 100"><g fill="%231172B8"><circle cx="20" cy="20" r="8"/><circle cx="50" cy="15" r="6"/><circle cx="70" cy="30" r="7"/><circle cx="35" cy="40" r="9"/><path d="M55 60c12 0 19 8 19 14s-7 9-19 9-19-3-19-9 7-14 19-14z"/></g></svg>');
+  background-size:140px 140px; transform:translateY(0);
 }
 .hero-inner{position:relative}
 .hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(16px,3vw,36px);align-items:center}
 @media (max-width:900px){.hero .grid{grid-template-columns:1fr}}
 .badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--cream);color:#5a3b19;
   border:1px dashed #FFB37A; padding:.4rem .75rem; border-radius:999px; font-weight:700}
-.badge i{font-style:normal}
+
+/* Títulos hero animados */
+.title-2025{display:flex;flex-direction:column;gap:.25rem}
+.title-2025 .line1{font-size:clamp(34px,6vw,68px);font-weight:800;color:#2B4C6B;letter-spacing:.2px}
+.title-2025 .line2{
+  font-size:clamp(36px,7vw,88px);font-weight:900;
+  background:linear-gradient(90deg,#7bd3ff,#9cf1e1,#ff9f68,#ff7aa8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 6px 16px rgba(0,0,0,.15);
+  background-size:200% 100%;
+}
+@media (prefers-reduced-motion:no-preference){
+  .title-2025 .line2{animation:hue 8s linear infinite}
+  @keyframes hue{0%{background-position:0%}100%{background-position:200%}}
+}
 
 /* Tarjetas */
-.section{padding:clamp(28px,4vw,56px) 0; color:var(--text-on-dark);} /* Color de texto por defecto en secciones */
-/* Ajuste de color de tarjeta para fondo oscuro (Mantenemos la tarjeta del hero en blanco para que resalte) */
+.section{padding:clamp(28px,4vw,56px) 0; color:var(--text-on-dark);}
 .card{
-  background:var(--ink); border-radius:18px; padding:1.1rem 1rem; border:1px solid var(--blue); /* Borde azul para destacar */
-  box-shadow:0 8px 28px rgba(17,114,184,.3); /* Sombra más fuerte */
+  background:#0F2232; border-radius:18px; padding:1.1rem 1rem; border:1px solid #204C6B;
+  box-shadow:0 8px 28px rgba(17,114,184,.18); transform-style:preserve-3d; transform:perspective(800px) rotateX(0) rotateY(0);
+  transition:transform var(--dur-m) var(--e1), box-shadow var(--dur-m) var(--e1), border-color var(--dur-s) var(--e1);
 }
-.hero .card{ /* El card dentro del hero debe ser de fondo claro para el contraste en el hero */
-  background:var(--white); 
-  border:1px solid #E6EEF5;
-  color:var(--text); /* Texto oscuro en tarjeta clara */
-}
-.hero .card figcaption{
-  color:var(--muted); /* Texto muted en tarjeta clara */
-}
+.card:hover{box-shadow:0 16px 40px rgba(17,114,184,.28); border-color:#3ea9ff}
+.hero .card{background:var(--white); border:1px solid #E6EEF5; color:var(--text)}
+.hero .card figcaption{color:var(--muted)}
 
 .grid-2{display:grid;gap:16px;grid-template-columns:repeat(2,1fr)}
 @media (max-width:768px){.grid-2{grid-template-columns:1fr}}
 .grid-3{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
 @media (max-width:900px){.grid-3{grid-template-columns:1fr}}
-.icon{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;color:var(--white);font-weight:900} /* Icono más claro */
-.icon.orange{background:var(--orange)}
-.icon.teal{background:var(--teal)}
-.icon.blue{background:var(--blue)}
-.icon.green{background:var(--green)}
-.divider{height:14px; background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="14" viewBox="0 0 160 14"><text x="0" y="12" font-family="Arial" font-size="14" fill="%232AB3A6">🦴 🦴 🦴 🦴 🦴</text></svg>') center/auto no-repeat; opacity:.6; margin:12px 0}
+.icon{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;color:var(--white);font-weight:900}
+.icon.orange{background:var(--orange)} .icon.teal{background:var(--teal)} .icon.blue{background:var(--blue)} .icon.green{background:var(--green)}
 
-/* CAMBIO 3: Invertir fondos alternos para que sean de color claro */
-.alt{
-  background:var(--mist);
-  color:var(--text); /* Texto oscuro en fondo claro */
+/* Divisor huesitos animados */
+.divider{height:14px; opacity:.75; margin:12px 0; position:relative; overflow:hidden}
+.divider::before{
+  content:"🦴 🦴 🦴 🦴 🦴 🦴 🦴"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  white-space:nowrap; transform:translateX(0);
 }
-.alt2{
-  background:var(--white);
-  color:var(--text); /* Texto oscuro en fondo claro */
-}
-.alt h2, .alt2 h2, .alt p, .alt2 p, .alt small, .alt2 small{
-  color:var(--text); /* Aseguramos que el texto sea oscuro */
-}
-/* Aseguramos que los elementos dentro de .alt o .alt2 tengan el fondo adecuado */
-.alt .card, .alt2 .card{
-  background:var(--white);
-  color:var(--text);
-  border:1px solid #E6EEF5;
-  box-shadow:0 8px 28px rgba(17,114,184,.08);
-}
-.alt small, .alt2 small{
-  color:var(--muted);
+@media (prefers-reduced-motion:no-preference){
+  .divider::before{animation:bone 10s linear infinite}
+  @keyframes bone{from{transform:translateX(-10%)}to{transform:translateX(10%)}}
 }
 
+/* Alternos claros */
+.alt{background:var(--mist); color:var(--text)}
+.alt2{background:var(--white); color:var(--text)}
+.alt .card,.alt2 .card{background:var(--white); color:var(--text); border:1px solid #E6EEF5; box-shadow:0 8px 28px rgba(17,114,184,.08)}
+.alt small,.alt2 small{color:var(--muted)}
 
-/* Listas */
+/* Listas y bloques */
 ul.check{list-style:none;padding:0;margin:0}
 ul.check li{display:flex;gap:.6rem;align-items:flex-start;padding:.5rem 0}
-.tag{display:inline-flex;align-items:center;gap:.3rem;background:#244C6B;color:var(--mist);border:1px solid #3A698F;padding:.3rem .6rem;border-radius:999px;font-weight:600} /* Tags más contrastantes */
-.kpi{display:flex;gap:10px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:.3rem;background:#244C6B;color:var(--mist);border:1px solid #3A698F;padding:.3rem .6rem;border-radius:999px;font-weight:600}
+.kpi{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .kpi strong{font-size:1.4rem}
-blockquote{margin:0;padding:1rem;border-left:5px solid var(--teal);background:#1A3850;border-radius:12px;color:var(--mist)} /* Bloque de cita en tono oscuro */
+blockquote{margin:0;padding:1rem;border-left:5px solid var(--teal);background:#1A3850;border-radius:12px;color:var(--mist)}
 blockquote .small{color:#AAB9C8}
 
-/* Estilo para la nueva sección de Autismo */
+/* Autismo box */
 .autismo-box{padding:24px;border-radius:16px;background:var(--blue);color:var(--white)}
 .autismo-box h3{color:var(--cream);border-bottom:2px solid var(--cream);padding-bottom:.5rem;margin-bottom:.75rem}
 
+/* Footer */
 footer{background:var(--ink);color:#E8F2F9;padding:32px 0; border-top: 2px solid var(--teal)}
 footer a{color:#9EE6FF}
-/* Accesibilidad */
-a.skip{position:absolute;left:-9999px}
-a.skip:focus{left:8px;top:8px;background:var(--white);color:var(--ink);padding:8px;border-radius:8px;z-index:999} /* Ajuste de color del skip link */
-img{max-width:100%;height:auto;border-radius:14px}
-form label{display:block;margin:.6rem 0 .25rem;color:var(--text)} /* Label de formulario en oscuro */
-input,textarea{width:100%;padding:.9rem;border:2px solid #DCE6EE;border-radius:12px;color:var(--ink);background:var(--white)} /* Input en blanco con texto oscuro */
-input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
-/* Preferencia de movimiento */
+
+/* REVEAL */
+.reveal{opacity:0; transform:translateY(24px); transition:opacity var(--dur-m) var(--e1), transform var(--dur-m) var(--e1)}
+.reveal.in{opacity:1; transform:none}
+
+/* Marquee 2025 */
+.ribbon{position:relative;background:#0f2a3d;border-block:1px solid #17425e}
+.ribbon .track{display:flex;gap:2rem;white-space:nowrap;color:#bfe9ff;padding:.4rem 0;font-weight:700;letter-spacing:.3px}
+.ribbon .track span{opacity:.9}
 @media (prefers-reduced-motion:no-preference){
-  .btn-primary:hover{box-shadow:0 10px 26px rgba(255,138,52,.35)}
+  .rmove{animation:ribbon 18s linear infinite alternate}
+  @keyframes ribbon{0%{transform:translateX(0)}100%{transform:translateX(-40%)}}
+}
+
+/* Resaltos */
+.shimmer{position:relative}
+.shimmer::after{
+  content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 30%, rgba(255,255,255,.25) 50%, transparent 70%);
+  transform:translateX(-100%) skewX(-15deg); pointer-events:none; mix-blend-mode:overlay; border-radius:inherit;
+}
+@media (prefers-reduced-motion:no-preference){
+  .shimmer:hover::after{animation:shine 1.2s var(--e1)}
+  @keyframes shine{to{transform:translateX(100%) skewX(-15deg)}}
+}
+
+/* Inputs */
+form label{display:block;margin:.6rem 0 .25rem;color:var(--text)}
+input,textarea{width:100%;padding:.9rem;border:2px solid #DCE6EE;border-radius:12px;color:var(--ink);background:var(--white)}
+input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
+
+/* Preferencias de movimiento */
+@media (prefers-reduced-motion:reduce){
+  .paws,.title-2025 .line2,.divider::before,.rmove{animation:none !important}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 
+<!-- CINTA 2025 -->
+<div class="ribbon" aria-hidden="true">
+  <div class="container">
+    <div class="track rmove" title="2025: Año más canino que nunca">
+      <span>🐾 2025 · Año más canino que nunca</span>
+      <span>• Comunidad • Becas • Talleres • Playeras & Sudaderas • Entrenamiento Ético •</span>
+      <span>🐾 2025 · Año más canino que nunca</span>
+      <span>• Comunidad • Becas • Talleres • Playeras & Sudaderas • Entrenamiento Ético •</span>
+    </div>
+  </div>
+</div>
+
 <header class="hero">
-  <div class="paws"></div>
+  <div class="paws" id="paws"></div>
   <div class="container hero-inner">
     <div class="grid">
-      <div>
-        <span class="badge"><i>🐾</i> Manada Club Programa Binomio Canino · Apoyo para TEA</span>
-        <h1>Un binomio que <span style="color:var(--blue)">acompaña</span> y <span style="color:var(--green)">empodera</span></h1>
-        <p class="small">Apoyo complementario para personas con autismo: seguridad, calma y participación social. **Una conexión única para un mundo diverso.**</p>
+      <div class="reveal">
+        <span class="badge shimmer"><i>🐾</i> Manada Club · Binomio Canino · Apoyo para TEA</span>
+        <div class="title-2025" style="margin-top:.5rem">
+          <div class="line1">Un binomio que acompaña y empodera</div>
+          <div class="line2">MANADA CLUB</div>
+        </div>
+        <p class="small" style="margin-top:.5rem;color:#37566c">
+          Apoyo complementario para personas con autismo: seguridad, calma y participación social.
+          <strong>Una conexión única para un mundo diverso.</strong>
+        </p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px">
-          <a class="btn btn-primary" href="#form">Solicita orientación gratuita</a>
-          <a class="btn btn-secondary" href="#tea-info">Conocer más sobre el TEA✨</a>
-          <a class="btn btn-ghost" href="#evidencia">Ver evidencia</a>
+          <a class="btn btn-primary magnet" href="#form">Solicita orientación gratuita</a>
+          <a class="btn btn-secondary magnet" href="#tea-info">Conocer más sobre el TEA ✨</a>
+          <a class="btn btn-ghost magnet" href="#evidencia">Ver evidencia</a>
         </div>
         <div class="kpi">
           <span class="tag">Enfoque ético</span>
@@ -169,10 +208,10 @@ input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
           <span class="tag">Seguimiento continuo</span>
         </div>
       </div>
-      <figure class="card" aria-label="Imagen de binomio canino">
-  <img src="https://picsum.photos/id/1025/600/400" alt="Joven con autismo practicando rutina de pausa con su perro de servicio">
-  <figcaption class="small">Rutinas que dan seguridad en familia y comunidad.</figcaption>
-</figure>
+      <figure class="card reveal" aria-label="Imagen de binomio canino">
+        <img src="https://picsum.photos/id/1025/600/400" alt="Joven con autismo practicando rutina de pausa con su perro de servicio">
+        <figcaption class="small">Rutinas que dan seguridad en familia y comunidad.</figcaption>
+      </figure>
     </div>
     <div class="divider" aria-hidden="true"></div>
   </div>
@@ -181,129 +220,141 @@ input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
 <main id="main">
 
   <section id="tea-info" class="section alt2">
-    <div class="container">
-      <h2>Entendiendo el **Espectro Autista (TEA)** 🧠</h2>
-      <p>El TEA es una condición del **neurodesarrollo** que dura toda la vida, y que se caracteriza por diferencias en la interacción social, la comunicación, y la presencia de patrones de comportamiento e intereses restringidos y repetitivos.</p>
+    <div class="container reveal">
+      <h2>Entendiendo el <strong>Espectro Autista (TEA)</strong> 🧠</h2>
+      <p>El TEA es una condición del <strong>neurodesarrollo</strong> que dura toda la vida, caracterizada por diferencias en interacción social, comunicación e intereses.</p>
 
       <div class="grid-2" style="margin-top:24px">
         <div class="autismo-box">
           <h3>📜 Orígenes y Causas</h3>
-          <p>El autismo no es causado por una sola cosa. Se considera un tema de **etiología compleja** (múltiples causas), donde predominan los factores:</p>
+          <p>Etiología <strong>compleja</strong>, donde predominan factores:</p>
           <ul class="check" style="color:var(--cream)">
-            <li>🧬 **Genéticos:** Es el factor más influyente. Involucra la interacción de múltiples genes, no uno solo.</li>
-            <li>🌱 **Ambientales:** Pueden aumentar el riesgo en personas con predisposición genética (ej. edad avanzada de los padres, bajo peso al nacer).</li>
+            <li>🧬 <strong>Genéticos:</strong> interacción de múltiples genes.</li>
+            <li>🌱 <strong>Ambientales:</strong> influyen en personas con predisposición.</li>
           </ul>
-          <p class="small" style="color:#d4e8f7; margin-top:1rem">❌ La idea obsoleta de las "madres nevera" y la relación con vacunas ha sido científicamente refutada.</p>
+          <p class="small" style="color:#d4e8f7; margin-top:1rem">❌ Teorías obsoletas (p.ej. “madres nevera” o vacunas) han sido refutadas.</p>
         </div>
         <div class="card" style="border-color:var(--teal)">
           <div class="icon green" aria-hidden="true">📊</div>
-          <h3>Tipos: El enfoque del Espectro (DSM-5)</h3>
-          <p>La clasificación moderna dejó de usar etiquetas separadas (como Autismo Clásico o Síndrome de Asperger) para centrarse en un único diagnóstico: **Trastorno del Espectro Autista (TEA)**, categorizado por niveles de apoyo:</p>
+          <h3>Tipos: Enfoque de Espectro (DSM-5)</h3>
           <ul class="check">
-            <li>**Nivel 1:** Requiere apoyo. Dificultad para iniciar interacciones sociales.</li>
-            <li>**Nivel 2:** Requiere apoyo sustancial. Dificultades sociales y de comunicación más notorias.</li>
-            <li>**Nivel 3:** Requiere apoyo muy sustancial. Déficits graves en la comunicación funcional.</li>
+            <li><strong>Nivel 1:</strong> Requiere apoyo.</li>
+            <li><strong>Nivel 2:</strong> Requiere apoyo sustancial.</li>
+            <li><strong>Nivel 3:</strong> Requiere apoyo muy sustancial.</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
 
   <section class="section">
-    <div class="container">
+    <div class="container reveal">
       <h2>¿Qué es un <span style="color:var(--teal)">binomio canino</span> de asistencia? 🐶</h2>
-      <p>Es el equipo persona + perro entrenado para apoyar necesidades específicas del espectro autista. El perro realiza **tareas útiles** (no solo compañía) y el equipo cuidador guía y refuerza.</p>
+      <p>Equipo persona + perro entrenado para apoyar necesidades del espectro. El perro realiza <strong>tareas útiles</strong> y el cuidador guía y refuerza.</p>
       <div class="grid-3" style="margin-top:12px">
-        <div class="card">
+        <div class="card tilt">
           <div class="icon blue" aria-hidden="true">🛡️</div>
           <h3>Perro de servicio</h3>
-          <p>Entrenado en tareas específicas y, según normativa, con acceso a espacios públicos para acompañar a su dueño.</p>
+          <p>Entrenado en tareas específicas y, según normativa, con acceso a espacios públicos.</p>
         </div>
-        <div class="card">
+        <div class="card tilt">
           <div class="icon teal" aria-hidden="true">💬</div>
           <h3>Mediador social</h3>
-          <p>Actúa como un 'puente' que facilita interacciones y transiciones con rutinas previsibles y menos ansiedad.</p>
+          <p>Facilita transiciones y reduce ansiedad con rutinas previsibles.</p>
         </div>
-        <div class="card">
+        <div class="card tilt">
           <div class="icon orange" aria-hidden="true">🔔</div>
           <h3>Interrupciones de conducta</h3>
-          <p>Señales entrenadas (como anclaje o presión profunda ligera) para apoyar la autorregulación y la seguridad en salidas.</p>
+          <p>Señales entrenadas (anclaje o presión profunda ligera) para autorregulación.</p>
         </div>
       </div>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
 
   <section class="section alt">
-    <div class="container">
+    <div class="container reveal">
       <h2>Beneficios con base en evidencia 📊</h2>
       <ul class="check">
-        <li>✅ **Regulación Emocional:** Reducción de estrés fisiológico (cortisol) y mayor calma en situaciones desafiantes.</li>
-        <li>✅ **Seguridad Vital:** Más seguridad en traslados y apoyo crucial para prevenir y gestionar la deambulación (wandering).</li>
-        <li>✅ **Inclusión Social:** El perro actúa como un puente social, promoviendo la participación en escuela y comunidad.</li>
-        <li>✅ **Estructura Familiar:** Promueve rutinas más predecibles y reduce la ansiedad en todo el núcleo familiar.</li>
+        <li>✅ <strong>Regulación Emocional:</strong> reducción de cortisol y mayor calma.</li>
+        <li>✅ <strong>Seguridad Vital:</strong> prevención y gestión de deambulación.</li>
+        <li>✅ <strong>Inclusión Social:</strong> puente social en escuela y comunidad.</li>
+        <li>✅ <strong>Estructura Familiar:</strong> rutinas predecibles y menos ansiedad.</li>
       </ul>
-      <p class="small">⚠️ Resultados variables por persona. Este apoyo es un **complemento** valioso a las terapias clínicas y educativas.</p>
-      <a class="btn btn-primary" href="#form">Quiero saber si califico</a>
+      <p class="small">⚠️ Complementa, no sustituye, terapias clínicas y educativas.</p>
+      <a class="btn btn-primary magnet" href="#form">Quiero saber si califico</a>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
 
   <section class="section">
-    <div class="container">
+    <div class="container reveal">
       <h2>Del primer contacto al acompañamiento 🐾</h2>
       <div class="grid-3">
-        <div class="card"><h3>1. Evaluación Holística</h3><p>Analizamos: metas familiares, contextos de vida y sensibilidades sensoriales únicas del usuario.</p></div>
-        <div class="card"><h3>2. Selección del Compañero</h3><p>Priorizamos temperamento estable, salud impecable y aptitudes innatas para el trabajo de servicio.</p></div>
-        <div class="card"><h3>3. Entrenamiento Funcional</h3><p>Enseñamos tareas específicas: presión profunda ligera, anclaje al cuidador, interrupción de conductas autoestimulatorias.</p></div>
-        <div class="card"><h3>4. Vinculación Binomio</h3><p>Prácticas guiadas e intensivas para asegurar el vínculo, integrando las rutinas en casa y en la comunidad.</p></div>
-        <div class="card"><h3>5. Seguimiento Continuo</h3><p>Ofrecemos refuerzo, ajustes necesarios al entrenamiento y garantizamos el bienestar a largo plazo de todo el binomio.</p></div>
-        <div class="card"><h3>Ética y Bienestar</h3><p>Todo el proceso se rige por **refuerzo positivo**, protocolos de descanso claros y salud integral del perro de servicio.</p></div>
+        <div class="card tilt"><h3>1. Evaluación Holística</h3><p>Metas familiares, contexto y sensibilidades sensoriales.</p></div>
+        <div class="card tilt"><h3>2. Selección del Compañero</h3><p>Temperamento estable, salud impecable y aptitudes innatas.</p></div>
+        <div class="card tilt"><h3>3. Entrenamiento Funcional</h3><p>Presión profunda, anclaje, interrupción de conductas.</p></div>
+        <div class="card tilt"><h3>4. Vinculación Binomio</h3><p>Prácticas intensivas e integración en casa y comunidad.</p></div>
+        <div class="card tilt"><h3>5. Seguimiento Continuo</h3><p>Refuerzos, ajustes y bienestar a largo plazo.</p></div>
+        <div class="card tilt"><h3>Ética y Bienestar</h3><p>Refuerzo positivo, descanso y salud integral del perro.</p></div>
       </div>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
 
-  <section class="section alt2">
-    <div class="container">
-      <h2>Historias reales de impacto 🌟</h2>
-      <div class="grid-3">
-        <blockquote class="card">“Con Luna, las salidas pasaron de 20 a 60 minutos sin crisis. Leo se calma más rápido.” <br><span class="small">— María, mamá de Leo (8)</span></blockquote>
-        <blockquote class="card">“Mi perro me toca la pierna cuando me bloqueo o me sobrecargo. Respiro y puedo volver a concentrarme en clase.” <br><span class="small">— Javier (17)</span></blockquote>
-        <blockquote class="card">“Dormimos mejor. Las rutinas de presencia con Neko bajaron la ansiedad nocturna de toda la familia.” <br><span class="small">— Andrea (madre)</span></blockquote>
-      </div>
-    </div>
-  </section>
-  <hr style="border-color: #244C6B;">
-
-  <section id="evidencia" class="section">
-    <div class="container">
+  <section class="section alt2" id="evidencia">
+    <div class="container reveal">
       <h2>Transparencia y evidencia científica</h2>
       <ul class="check">
-        <li>✅ **Reducción de Estrés:** Viau et al., 2010 — reducción de cortisol salival en interacciones con perros (DOI: 10.1016/j.psyneuen.2010.02.004)</li>
-        <li>✅ **Efectos Generales:** O’Haire, 2013 — revisión sistemática sobre efectos positivos en habilidades sociales y problemas de conducta (DOI: 10.1007/s10803-012-1707-5)</li>
-        <li>✅ **Bienestar del Binomio:** Burrows et al., 2008 — estudios sobre el manejo, calidad de vida y bienestar del perro de servicio (DOI: 10.1080/10888700801922433)</li>
+        <li>✅ <strong>Reducción de Estrés:</strong> Viau et al., 2010 (DOI: 10.1016/j.psyneuen.2010.02.004)</li>
+        <li>✅ <strong>Efectos Generales:</strong> O’Haire, 2013 (DOI: 10.1007/s10803-012-1707-5)</li>
+        <li>✅ <strong>Bienestar del Binomio:</strong> Burrows et al., 2008 (DOI: 10.1080/10888700801922433)</li>
       </ul>
-      <a id="guia" class="btn btn-secondary" href="guia.pdf" download>Descargar guía para familias (PDF)</a>
+      <a id="guia" class="btn btn-secondary magnet" href="guia.pdf" download>Descargar guía para familias (PDF)</a>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
 
-  <section class="section alt">
-    <div class="container">
-      <h2>Elegibilidad, costos y becas 🤝</h2>
-      <p>Evaluamos diagnóstico, metas y entorno. Contamos con opciones escalables y becas según estudio socioeconómico. **Nuestro compromiso es con la accesibilidad.**</p>
-      <div class="kpi"><span class="tag">Becas disponibles</span><span class="tag">Planes de pago flexibles</span></div>
-      <div style="margin-top:12px">
-        <a class="btn btn-primary" href="#form">Conoce tus opciones</a>
+  <!-- PROPUESTA 2025 -->
+  <section class="section" id="prop-2025">
+    <div class="container reveal">
+      <h2>Propuesta 2025: Manada Club 360° 🚀</h2>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="card tilt">
+          <div class="icon teal">🤝</div>
+          <h3>Comunidad y Becas</h3>
+          <p>Fondo de becas + voluntariado. Meta <strong id="k1">0</strong> familias apoyadas.</p>
+        </div>
+        <div class="card tilt">
+          <div class="icon blue">📱</div>
+          <h3>Toolkit Digital</h3>
+          <p>Webapp con rutinas guiadas, fichas de tareas y progreso.</p>
+        </div>
+        <div class="card tilt">
+          <div class="icon orange">👕</div>
+          <h3>Merch con causa</h3>
+          <p>Playeras y sudaderas para financiar becas. Primer drop en Q1.</p>
+        </div>
       </div>
     </div>
   </section>
-  <hr style="border-color: #244C6B;">
+  <hr style="border-color:#244C6B">
+
+  <section class="section alt">
+    <div class="container reveal">
+      <h2>Historias reales de impacto 🌟</h2>
+      <div class="grid-3">
+        <blockquote class="card">“Con Luna, las salidas pasaron de 20 a 60 minutos sin crisis.” <br><span class="small">— María, mamá de Leo (8)</span></blockquote>
+        <blockquote class="card">“Mi perro me toca la pierna cuando me bloqueo. Respiro y vuelvo a concentrarme.” <br><span class="small">— Javier (17)</span></blockquote>
+        <blockquote class="card">“Dormimos mejor. La presencia de Neko bajó la ansiedad nocturna.” <br><span class="small">— Andrea</span></blockquote>
+      </div>
+    </div>
+  </section>
+  <hr style="border-color:#244C6B">
 
   <section class="section" id="contacto">
-    <div class="container">
+    <div class="container reveal">
       <h2>Hablemos y transformemos vidas</h2>
       <form id="form" class="card" aria-describedby="privacidad" style="background: var(--white); color: var(--text);">
         <label for="nombre">Nombre</label>
@@ -313,10 +364,10 @@ input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
         <label for="mensaje">Cuéntanos sobre el usuario y sus metas</label>
         <textarea id="mensaje" name="mensaje" rows="4"></textarea>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-          <button class="btn btn-primary" type="submit">Solicitar orientación gratuita</button>
-          <a class="btn btn-ghost" href="#faq">Preguntas frecuentes</a>
+          <button class="btn btn-primary magnet" type="submit">Solicitar orientación gratuita</button>
+          <a class="btn btn-ghost magnet" href="#faq">Preguntas frecuentes</a>
         </div>
-        <p id="privacidad" class="small" style="color:var(--muted)">Protegemos tu privacidad. La información proporcionada no sustituye un asesoramiento clínico o diagnóstico profesional.</p>
+        <p id="privacidad" class="small" style="color:var(--muted)">Protegemos tu privacidad. Este material no sustituye asesoramiento clínico.</p>
       </form>
     </div>
   </section>
@@ -325,9 +376,92 @@ input:focus-visible,textarea:focus-visible{outline:3px solid var(--teal)}
 <footer>
   <div class="container">
     <p><strong>Binomio Canino & Autismo</strong> · Enfoque ético y basado en evidencia · <a href="#evidencia">Ver fuentes</a></p>
-    <p class="small">©ManadaClub MR. Todos los derechos reservados.</p>
+    <p class="small">© <span id="year"></span> ManadaClub MR. Todos los derechos reservados.</p>
   </div>
 </footer>
 
+<script>
+/* Parallax suave de huellitas */
+const paws = document.getElementById('paws');
+window.addEventListener('scroll',()=>{
+  const y = Math.min(window.scrollY*0.05, 40);
+  paws.style.transform = `translateY(${y}px)`;
+});
+
+/* Reveal al hacer scroll (accesible) */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* Tilt 3D suave en tarjetas */
+function makeTilt(el){
+  let rAF=null;
+  el.addEventListener('mousemove', e=>{
+    const b = el.getBoundingClientRect();
+    const cx = e.clientX - b.left, cy = e.clientY - b.top;
+    const rotateY = ((cx / b.width) - .5) * 8;
+    const rotateX = ((cy / b.height) - .5) * -8;
+    if(rAF) cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(()=>{ el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`; });
+  });
+  el.addEventListener('mouseleave', ()=>{ el.style.transform='perspective(800px) rotateX(0) rotateY(0)'; });
+}
+document.querySelectorAll('.tilt').forEach(makeTilt);
+
+/* Botones “magnéticos” */
+document.querySelectorAll('.magnet').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX - (r.left + r.width/2);
+    const y=e.clientY - (r.top + r.height/2);
+    btn.style.transform=`translate(${x*0.08}px,${y*0.08}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>btn.style.transform='translate(0,0)');
+});
+
+/* KPI contador (demo) */
+function countTo(el, end, dur=1200){
+  const start = 0; const t0 = performance.now();
+  function step(t){
+    const k = Math.min((t - t0)/dur,1);
+    el.textContent = Math.round(start + (end-start)*k).toLocaleString('es-MX');
+    if(k<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const k1 = document.getElementById('k1'); if(k1){ countTo(k1, 100); }
+
+/* Año dinámico */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Confetti de huesitos al enviar */
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  sprinkleBones(e.target);
+  alert('¡Gracias! Te contactaremos muy pronto 🐾');
+});
+function sprinkleBones(target){
+  const wrapper=document.createElement('div');
+  Object.assign(wrapper.style,{position:'fixed',inset:'0',pointerEvents:'none',overflow:'hidden',zIndex:9999});
+  document.body.appendChild(wrapper);
+  const N=24;
+  for(let i=0;i<N;i++){
+    const s=document.createElement('div');
+    s.textContent='🦴'; s.style.position='absolute';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = '-10%';
+    const size = 18 + Math.random()*18;
+    s.style.fontSize = size+'px';
+    s.style.transition='transform 1.2s cubic-bezier(.16,1,.3,1), opacity .9s';
+    wrapper.appendChild(s);
+    requestAnimationFrame(()=>{
+      s.style.transform=`translateY(${100+Math.random()*40}vh) rotate(${(Math.random()*360)|0}deg)`;
+      s.style.opacity='0';
+    });
+  }
+  setTimeout(()=>wrapper.remove(),1400);
+}
+</script>
 </body>
 </html>
